@@ -30,24 +30,6 @@ typedef vector<vector<pair<int, int>>> wgraph;
 #define FOR(i, a, b) for(int i = a; i < b; i++)
 #define ROF(i, a, b) for(int i = b-1; i>=0; i--)
 
-map<int, ll> memo;
-map<int, bool> visited;
-
-ll solve(int n) {
-    if (n < 0)
-        return 0;
-    if (visited[n])
-        return memo[n];
-    ll ans = 0;
-
-    FOR(i,1,7) {
-        ans = (ans + solve(n-i)) % MOD;
-    }
-    visited[n] = true;
-    memo[n] = ans;
-    return ans;
-}
-
 int main()
 {
     // Optimizacion I/O
@@ -55,10 +37,22 @@ int main()
     cin.tie(0);
     cout.tie(0);
 
-    visited[0] = true;
-    memo[0] = 1;
-
     int n;
     cin >> n;
-    cout << solve(n) << endl;
+    vector<ll> memo(n+1, 0);
+
+    memo[0] = 1;
+
+    FOR(i,1,n+1) {
+        ll ans = 0;
+        FOR(j,1,7) {
+            if (i - j >= 0) {
+                ans = (ans + memo[i-j]) % MOD;
+            }
+        }
+        memo[i] = ans;
+    }
+
+    cout << memo[n] << endl;
+
 }
